@@ -1,0 +1,20 @@
+{
+    "name": "jair/ae2",
+    "description": "Ejemplo",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Jair\\Ae2\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "j-glich",
+            "email": "72561315+j-glich@users.noreply.github.com"
+        }
+    ],
+    "require": {
+        "phpoffice/phpspreadsheet": "^1.18"
+    }
+}
