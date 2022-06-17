@@ -8,7 +8,7 @@ try {
   function li_periodos(){
     $ip_adress= $_SERVER['REMOTE_ADDR'];
 
-    $stmt= "CALL sp_li_periodos()";
+    $stmt= "CALL sp_pda_li_periodos()";
      // echo $stmt;
     $result = execQuery($stmt);
     //print_r($result);

@@ -2,7 +2,6 @@
 require_once($_SERVER['DOCUMENT_ROOT']."/ae/controller/pda/cAsignacionActividad.php");
 require_once($_SERVER['DOCUMENT_ROOT']."/ae/controller/pda/cCargaHoraria.php");
 $periodo_actual = (isset($_GET['cve_periodo'])) ? $_GET['cve_periodo'] : '0';
-echo $periodo_actual;
   //echo $cve_docente;
 $sub = ["0" => "DFG" ];
   //Obtenemos el tamanio del arreglo 
@@ -161,26 +160,23 @@ $aux =0;
        <tbody id='pruebatabla' >
        <?php 
            //obetemos la longitud del arreglo mediante el metodo sizeof() el cual resive el arreglo productos 
-           foreach( $datos as $subs){     
-           ?>
-     
-           <tr style="text-align: center;">
-           <?php   if($aux_tem_subcategoria < 1 ){  $aux_tem_subcategoria++;?>
-               <td valign="middle" rowspan="<?php echo $productos_t ?>" id="menu<?php echo $count_temp ?>"> <label style="position:relative; top: 80px;" for=""><?php echo $subs['categoría'];?></label></td>
-               <?php }
-               if($subs['default'] != 'E' ){
-               ?>
-               <td> <label id="lb<?php echo $subs['clave'];?>" name="<?php echo $subs['clave']; ?>" for="<?php echo $subs['clave']; ?>-chk"><?php echo $subs['titulo'];?></label></td>
-               <td><input class="chk_producto"   type="checkbox" id="<?php echo $subs['clave']; ?>-chk" value="<?php echo $subs['clave']; ?>"  onclick="verificar(this);"/></td>
-               <td>
-               <input max="3" maxlength="3" min="1" minlength="1" onchange="modificar_horas(this)"  type="text" value="000" onkeypress="return solonumeros(event)" name="<?php echo $subs['clave']; ?>" id="<?php echo $subs['clave']; ?>" readonly="true" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"aling="right"/>  
-            <?php 
-           } ?>
-             </td>   
-           </tr> 
-<?php  
-           }
-           $aux_tem_subcategoria =0;
+          foreach( $datos as $subs){ ?>
+            <tr style="text-align: center;">
+            <?php   if($aux_tem_subcategoria < 1 ){  $aux_tem_subcategoria++;?>
+              <td valign="middle" rowspan="<?php echo $productos_t ?>" id="menu<?php echo $count_temp ?>"> <label style="position:relative; top: 80px;" for=""><?php echo $subs['categoría'];?></label></td>
+              <?php }
+                if($subs['default'] != 'E' ){
+              ?>
+              <td> <label id="lb<?php echo $subs['clave'];?>" name="<?php echo $subs['clave']; ?>" for="<?php echo $subs['clave']; ?>-chk"><?php echo $subs['titulo'];?></label></td>
+              <td><input class="chk_producto"   type="checkbox" id="<?php echo $subs['clave']; ?>-chk" value="<?php echo $subs['clave']; ?>"  onclick="verificar(this);"/></td>
+              <td>
+              <input max="3" maxlength="3" min="1" minlength="1" onchange="modificar_horas(this)"  type="text" value="000" onkeypress="return solonumeros(event)" name="<?php echo $subs['clave']; ?>" id="<?php echo $subs['clave']; ?>" readonly="true" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm"aling="right"/>  
+              <?php 
+            } ?>
+              </td>   
+            </tr> 
+<?php      }
+          $aux_tem_subcategoria =0;
 ?>
 </tbody>      
 </table>
@@ -188,8 +184,6 @@ $aux =0;
 </div>
 
 <?php }
-
-
 }
 ?>
 </div>

@@ -1,5 +1,5 @@
 <?php
-
+  date_default_timezone_set('America/Mexico_City');
 try {
     require_once($_SERVER['DOCUMENT_ROOT']."/ae/config/conexion.php");
   } catch (\Exception $e) {
@@ -18,7 +18,7 @@ $sql ="CALL sp_pda_li_evidencia_x_docente_excel('$cve_docente','$cve_periodo')";
 $datos = execQuery($sql);
 
 if($datos == 0){
-    redirect('view/pda/plan_de_trabajo.php');
+ echo "<script>window.location.replace('view/index.php?sp_registro=4')</script>";
 }else{
 
     $documento = new Spreadsheet();
@@ -36,10 +36,11 @@ if($datos == 0){
     
     $rutaArchivo = "public/plantilla/P-DA-01-F-08 Plan de Trabajo de Actividades Sustantivas.xlsx";
     $documento = IOFactory::load($rutaArchivo);
-    
     $sheet = $documento->getActiveSheet();
     $hoy = date("Y-m-d H:i:s");
     $sheet->setCellValue('D5',$datos[0]['DO_CATEGORIA']);
+    $sheet->setCellValue('D4',$datos[0]['PE_DESCRIPCION']."-".$datos[0]['PE_ANIO'])->getStyle('D4')->getFont()->setSize(12);
+    $sheet->getStyle('D4')->getAlignment()->setHorizontal('center');
     $sheet->setCellValue('K4',$hoy);
     $sheet->setCellValue('G5',$datos[0]['DO_NOMBRE_1']);
     

@@ -48,7 +48,8 @@ background-color: none;
 </style>
 <form id="frmCargaHoraria" name="frmCargaHoraria" >
 <div id="cargahoraria" class="box box-solid" >
-  <div class="box box-header">
+  <div class="box box-header" style="text-align:center ;">
+    <h4 for="">Control de plan de trabajo</h4>
   <nav style="text-align: center;"  class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">

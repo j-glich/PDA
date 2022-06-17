@@ -59,8 +59,14 @@ var periodo ="<?php echo $cve_periodo; ?>";
   form('pda/carga_horaria.php?cve_periodo='+periodo);
   document.getElementById('menu').style = 'display:block';
 }
-else if(carga_exito == 3){
+if(carga_exito == 3){
+  document.getElementById('menu').style = 'display:block';
   form('pda/rubros.php');
+}
+if(carga_exito == 4){
+  document.getElementById('menu').style = 'display:block';
+  alertaError("Docente sin registro de productos durante ese periodo...")
+  form('pda/plan_de_trabajo.php?cve_docente='+id_docente+"&cve_periodo="+periodo);
 }
 
 if(evaluacion == 1){

@@ -11,23 +11,17 @@ $periodos = listar_periodos();
 <div class="box-header with-border">
     <h4 class="box-header with-border"><p style="text-align:center;">Reportes de Plan de Trabajo</p></h4>
 </div>
+
 <!-- /.box-header -->
 <div class="box-body"  id="pdf" >
-    <div class="row">
-        <div class="col">
-        <select name="cve_periodo" id="cve_periodo" class="form-control" style="width: 80%; font-size: 20px;" value="">
+<select name="cve_periodo" id="cve_periodo" class="form-control" style="font-size: 20px; margin-bottom: 20px;" value="">
+<option value="">Seleccioar el periodo del reporte</option>
                 <?php 
                 foreach( $periodos as $filas_D){ ?>
                     <option value="<?php echo $filas_D['clave']; ?>"><?php echo $filas_D['clave'].'.-'. 
                     $filas_D['anio'].'.-'. $filas_D['desc']  ?></option>   
                     <?php } //Fin del Select?>
-        </select>
-        </div>
-        <div class="col">
-
-        </div>
-    </div>
-
+        </select>  
     <table class="table table-striped" id='tablaDocentes'>
         <thead>
           <tr style="text-align: center; font-size: 20px;">
@@ -60,60 +54,40 @@ $periodos = listar_periodos();
     </table>
     </form>
 </div>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Buscar perido 
-</button>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- /.box-body -->
 </div>
 
 <script type="text/javascript">
-
-
 $(document).ready(function(){
-
 tablaPersonas = $("#tablaDocentes").DataTable({    
-"language": {
-        "lengthMenu": "Mostrar _MENU_ registros",
-        "zeroRecords": "No se encontraron resultados",
-        "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
-        "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-        "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-        "sSearch": "Buscar:",
-        "oPaginate": {
-            "sFirst": "Primero",
-            "sLast":"Último",
-            "sNext":"Siguiente",
-            "sPrevious": "Anterior"
-        },
-        "sProcessing":"Procesando...",
-    }
+  "language": {
+          "lengthMenu": "Mostrar _MENU_ registros",
+          "zeroRecords": "No se encontraron resultados",
+          "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+          "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+          "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+          "sSearch": "Buscar:",
+          "oPaginate": {
+              "sFirst": "Primero",
+              "sLast":"Último",
+              "sNext":"Siguiente",
+              "sPrevious": "Anterior"
+          },
+          "sProcessing":"Procesando...",
+      }
+  });
 });
+$(document).on("click", "#generarPDF", function(e){
+  e.preventDefault();
+  cve_docente = parseInt($(this).closest("tr").find('td:eq(0)').text());
+  cve_periodo = document.getElementById('cve_periodo').value;
+  if (cve_periodo != "") {
+    window.location.replace('../loadexcel.php?cve_docente='+cve_docente +"&+"+"cve_periodo="+cve_periodo);
+  }else{
+    alertaError('Ingresar el periodo')
+    return false;
+  }
 });
-
-    $(document).on("click", "#generarPDF", function(e){
-    e.preventDefault();
-    cve_docente = parseInt($(this).closest("tr").find('td:eq(0)').text());
-    window.location.replace('../loadexcel.php?cve_docente='+cve_docente +"&+"+"cve_periodo="+document.getElementById('cve_periodo').value);
-    });
 </script>
 
 
