@@ -51,7 +51,15 @@ if($datos == 0){
     for ($i=0; $i < sizeof($datos) ; $i++) { 
       $array_categorias[] = array('clave' =>$datos[$i]['CAT_CVE'],'titulo' =>$datos[$i]['CAT_TITULO']);
       $array_subcategorias[] = array('clave' =>$datos[$i]['SCAT_CVE'],'titulo' =>$datos[$i]['SCAT_TITULO']);
-      $array_productos[] = array('titulo' =>$datos[$i]['PR_TITULO'],'desc' =>$datos[$i]['PR_DESCRIPCION'],'cve_subCat' =>$datos[$i]['PR_SCAT_CVE']);
+      $array_productos[] = array('titulo' =>$datos[$i]['PR_TITULO'],
+                                  'desc' =>$datos[$i]['PR_DESCRIPCION'],
+                                  'cve_subCat' =>$datos[$i]['PR_SCAT_CVE'],
+                                  'fecha_programa' =>$datos[$i]['EC_FECHA_PROGRAMADA'],
+                                  'fecha_cumplimiento' =>$datos[$i]['EC_FECHA_CUMPLIMIENTO'],
+                                  'cve_categoria' =>$datos[$i]['SCAT_CVE_CAT'],
+                                  'forma' =>$datos[$i]['EC_FORMA'],
+                                  'tiempo' =>$datos[$i]['EC_TIEMPO']);
+    
     }
     $array_categorias =  array_merge(array_unique($array_categorias, SORT_REGULAR));
     $array_subcategorias = array_merge(array_unique($array_subcategorias, SORT_REGULAR));
@@ -61,9 +69,48 @@ if($datos == 0){
     $count_subCat = 0;
 
     for ($i=0; $i < sizeof($array_productos) ; $i++) { 
-      $sheet->setCellValue($CellD.(9+$i),$array_productos[$i]['titulo'])->getStyle($CellD.(9+$i))->getAlignment()->setWrapText(true);
-      $sheet->setCellValue($CellF.(9+$i),$array_productos[$i]['desc'])->getStyle($CellF.(9+$i))->getAlignment()->setWrapText(true);
+      $sheet->setCellValue($CellD.(9+$i),$array_productos[$i]['titulo'])
+      ->getStyle($CellD.(9+$i))->getAlignment()->setWrapText(true);
+      $sheet->setCellValue($CellF.(9+$i),$array_productos[$i]['desc'])
+      ->getStyle($CellF.(9+$i))->getAlignment()->setWrapText(true);
+      $sheet->setCellValue('E'.(9+$i),substr($array_productos[$i]['fecha_programa'],0,11))
+      ->getStyle('E'.(9+$i))->getFont()->setSize(12);
+      $sheet->setCellValue('G'.(9+$i),$array_productos[$i]['fecha_cumplimiento'])
+      ->getStyle('G'.(9+$i))->getFont()->setSize(12);
+      $sheet->setCellValue('H'.(9+$i),$array_productos[$i]['tiempo'])
+      ->getStyle('H'.(9+$i))->getFont()->setSize(12);
+      $sheet->setCellValue('I'.(9+$i),$array_productos[$i]['forma'])
+      ->getStyle('I'.(9+$i))->getFont()->setSize(12);
       $sheet->getRowDimension((9+$i))->setRowHeight(30,'px');
+    }
+
+    foreach ($array_categorias as $row) {
+      $count = array_count_values(array_column($array_productos,'cve_categoria'))[$row['clave']];
+      $array_contenedor[] = array(
+        'clave'=>$row['clave'],
+        'titulo'=>$row['titulo'],
+        'count'=>$count);
+    }
+    $count_suma;
+    for ($i=0; $i <sizeof($array_contenedor) ; $i++) { 
+      if($i==0){
+        $count_suma = (8+$array_contenedor[0]['count']);
+        $sheet->mergeCells('A9:A'.$count_suma)
+        ->setCellValue('A9',$array_contenedor[0]['titulo'])
+        ->getStyle('A9:A'.$count_suma)->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('l9:L'.$count_suma)
+        ->setCellValue('l9','')
+        ->getStyle('l9:L'.$count_suma)->getAlignment()->setHorizontal('center');
+      }else{
+        $count_suma2 = ($count_suma+$array_contenedor[$i]['count']);
+        $sheet->mergeCells('A'.($count_suma+1).':A'.$count_suma2)
+        ->setCellValue('A'.($count_suma+1),$array_contenedor[$i]['titulo'])
+        ->getStyle('A'.($count_suma+1).':A'.$count_suma2)->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('L'.($count_suma+1).':L'.$count_suma2)
+        ->setCellValue('L'.($count_suma+1),"")
+        ->getStyle('L'.($count_suma+1).':L'.$count_suma2)->getAlignment()->setHorizontal('center');
+        $count_suma = $count_suma2;
+      }
     }
 
     foreach( $array_subcategorias as $row){   
@@ -74,20 +121,25 @@ if($datos == 0){
         'count'=>$count);
     } 
     $suma =0;
+    $acom_sumas;
     for ($i=0; $i <sizeof($array_contadores) ; $i++) { 
       if($i==0){
         $suma = (8+$array_contadores[0]['count']);
         $sheet->mergeCells('B9:B'.$suma)
         ->setCellValue('B9',$array_contadores[0]['titulo'])
         ->getStyle('B9:B'.$suma)->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('C9:C'.$suma)->setCellValue('C9','');
       }else{
         $suma2 = ($suma+$array_contadores[$i]['count']);
         $sheet->mergeCells('B'.($suma+1).':B'.$suma2)
         ->setCellValue('B'.($suma+1),$array_contadores[$i]['titulo'])
         ->getStyle('B'.($suma+1).':B'.$suma2)->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells('C'.($suma+1).':C'.$suma2)->setCellValue('C'.($suma+1),'');
         $suma = $suma2;
       }
+
     }
+    
     //  Los siguientes encabezados son necesarios para que
      // el navegador entienda que no le estamos mandando
      // simple HTML
